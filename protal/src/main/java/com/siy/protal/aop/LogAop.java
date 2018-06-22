@@ -1,11 +1,10 @@
 package com.siy.protal.aop;
 
 
+import com.siy.protal.response.GeneticResp;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -36,7 +35,7 @@ public class LogAop {
     public void webLog() {
     }
 
-    @Before("webLog()")
+    /*@Before("webLog()")
     public void doBefore(JoinPoint joinPoint) {
         // 接收到请求，记录请求内容
         logger.info("#############程亮#########**********************请求开始**********************#########帅气#############");
@@ -55,12 +54,44 @@ public class LogAop {
             String paraName = enu.nextElement();
             System.out.println(paraName + ": " + request.getParameter(paraName));
         }
+    }*/
+    @Around(value = "webLog()")
+    public GeneticResp around(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+        // 接收到请求，记录请求内容
+        logger.info("#############程亮#########**********************请求开始**********************#########帅气#############");
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = attributes.getRequest();
+
+        // 记录下请求内容
+        logger.info("URL : " + request.getRequestURL().toString());
+        logger.info("HTTP_METHOD : " + request.getMethod());
+        logger.info("IP : " + request.getRemoteAddr());
+        logger.info("CLASS_METHOD : " + proceedingJoinPoint.getSignature().getDeclaringTypeName() + "." + proceedingJoinPoint.getSignature().getName());
+        logger.info("ARGS : " + Arrays.toString(proceedingJoinPoint.getArgs()));
+        //获取所有参数方法一：
+        Enumeration<String> enu = request.getParameterNames();
+        while (enu.hasMoreElements()) {
+            String paraName = enu.nextElement();
+            System.out.println(paraName + ": " + request.getParameter(paraName));
+        }
+        Object result = null;
+        try {
+            result = proceedingJoinPoint.proceed();
+            // 处理完请求，返回内容
+            logger.info("#############程亮#########**********************响应结束**********************########帅气#############");
+        } catch (Exception e) {
+            logger.error(e.toString()+"--------------------------错误信息");
+            GeneticResp<Object> objectGeneticResp = new GeneticResp<>();
+            logger.info("#############程亮#########**********************响应结束**********************########帅气#############");
+            return objectGeneticResp.error(-1000,"服务器忙");
+        }
+        return (GeneticResp)result;
     }
 
 
-    @AfterReturning("webLog()")
+    /*@AfterReturning("webLog()")
     public void doAfterReturning(JoinPoint joinPoint) {
         // 处理完请求，返回内容
         logger.info("#############程亮#########**********************响应结束**********************########帅气#############");
-    }
+    }*/
 }
