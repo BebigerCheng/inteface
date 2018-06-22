@@ -75,15 +75,21 @@ public class LogAop {
             System.out.println(paraName + ": " + request.getParameter(paraName));
         }
         Object result = null;
+        Exception e = null;
         try {
             result = proceedingJoinPoint.proceed();
             // 处理完请求，返回内容
             logger.info("#############程亮#########**********************响应结束**********************########帅气#############");
-        } catch (Exception e) {
-            logger.error(e.toString()+"--------------------------错误信息");
+        } catch (Exception ex) {
+            logger.error(ex.toString()+"--------------------------错误信息");
             GeneticResp<Object> objectGeneticResp = new GeneticResp<>();
+            e = ex;
             logger.info("#############程亮#########**********************响应结束**********************########帅气#############");
             return objectGeneticResp.error(-1000,"服务器忙");
+        } finally {
+            if(e != null){
+                throw new Exception(e);
+            }
         }
         return (GeneticResp)result;
     }
