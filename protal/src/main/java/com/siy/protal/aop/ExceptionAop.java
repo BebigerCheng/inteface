@@ -1,9 +1,9 @@
 package com.siy.protal.aop;
 
 import com.siy.protal.response.GeneticResp;
-import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -12,11 +12,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class ExceptionAop {
     
-        /*private final Logger logger = LoggerFactory.getLogger("统一异常处理加载了");
-        // 切入点表达式按需配置
-        @Pointcut("execution(public * com.siy.protal.controller.*.*(..))")
+        private final Logger logger = LoggerFactory.getLogger("统一异常处理加载了");
+        // 切入点表达式按需配置  com.siy.protal.exception.PcException
+        @Pointcut("execution(public * com.siy.protal.exception.*.*(..))")
         private void myPointcut() {
-        }*/
+        }
 
         /*@Before("myPointcut()")
         public void before(JoinPoint joinPoint) {
@@ -29,12 +29,14 @@ public class ExceptionAop {
                 log.append(arg + " ");
             }
             logger.warn(log.toString());
-        }
+        }*/
 
         @AfterReturning(value = "myPointcut()", returning = "returnVal")
-        public void afterReturin(Object returnVal) {
+        public GeneticResp afterReturin(Object returnVal) {
             logger.warn("方法正常结束了,方法的返回值:" + returnVal);
-        }*/
+            GeneticResp<Object> objectGeneticResp = new GeneticResp<>();
+            return objectGeneticResp.error(-1000,"服务器忙");
+        }
 
         /*@AfterThrowing(value = "StationCardServiceAspect.myPointcut()", throwing = "e")
         public void afterThrowing(Throwable e) {

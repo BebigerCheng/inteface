@@ -1,6 +1,7 @@
 package com.siy.protal.aop;
 
 
+import com.siy.protal.exception.PcException;
 import com.siy.protal.response.GeneticResp;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -88,7 +89,7 @@ public class LogAop {
             return objectGeneticResp.error(-1000,"服务器忙");
         } finally {
             if(e != null){
-                throw new Exception(e);
+                throw new PcException(e);
             }
         }
         return (GeneticResp)result;
