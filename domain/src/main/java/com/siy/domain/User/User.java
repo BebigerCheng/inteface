@@ -8,6 +8,8 @@ public class User implements Serializable{
     private String address;
     private String sex;
 
+    
+
     public String getName() {
         return name;
     }
