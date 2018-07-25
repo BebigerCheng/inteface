@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -24,7 +25,7 @@ public class UserController {
         GeneticResp<List> geneticResp = new GeneticResp<>();
             List userList = userService.getUserList();
             int i = 10 / 0;
-            HashMap<String, String> map = new HashMap<>();
+            Map<String, String> map = new HashMap<>();
             map.put("aini","woyeaini");
             
             return geneticResp.success(userList,map);

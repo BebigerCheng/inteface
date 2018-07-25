@@ -44,9 +44,6 @@ public class CryptUtils {
         try {
 
             SecretKey secretKey=new SecretKeySpec(key.getBytes(), way);
-
-          /*SecretKeyFactory sf = SecretKeyFactory.getInstance("AES");
-          SecretKey secretKey = sf.generateSecret(new DESKeySpec(way.getBytes("utf-8")));*/
             Cipher cipher = Cipher.getInstance(way+"/ECB/PKCS5Padding");
             cipher.init(Cipher.ENCRYPT_MODE, secretKey);
             byte[] p = plainText.getBytes(charset);
